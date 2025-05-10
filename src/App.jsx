@@ -41,7 +41,7 @@ function App() {
 
     try {
       const formData = new FormData();
-      const baseUrl = 'https://7c662935860479.lhr.life';
+      const baseUrl = 'http://128.140.92.117:7000';
       // const baseUrl = window.location.origin;
       let url = '';
     
