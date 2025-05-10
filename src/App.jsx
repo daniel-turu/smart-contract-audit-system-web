@@ -41,8 +41,8 @@ function App() {
 
     try {
       const formData = new FormData();
-      // const baseUrl = 'http://127.0.0.1:8000';
-      const baseUrl = window.location.origin;
+      const baseUrl = 'https://7c662935860479.lhr.life';
+      // const baseUrl = window.location.origin;
       let url = '';
     
       if (type === 'file') {
