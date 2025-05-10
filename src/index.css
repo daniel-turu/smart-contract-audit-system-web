@@ -1,0 +1,74 @@
+/* src/index.css or src/tailwind.css */
+@import "tailwindcss";
+
+
+:root {
+  font-family: 'Ubuntu', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #242424;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.font-ubuntu {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+/* Custom Dark Background */
+.bg-dark-bg {
+  background-color: #242424;
+}
+
+.bg-dark-header {
+  background-color: #333333;
+}
+
+.no-print {
+  display: none !important;
+}
+
+
+
+@media print {
+  /* Set background color to white */
+  body {
+    background-color: white !important; /* Ensure print background is white */
+    color: black !important; /* Ensure text is black */
+  }
+
+  /* Make sure all the text color is correct */
+  .main-comp, .main-comp * {
+    color: black !important; /* Set text color to black */
+  }
+
+  /* Hide elements with the no-print class */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Optionally, remove any margins, padding, etc., to ensure clean print layout */
+  body, html {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Adjust any other elements as needed */
+  .bg-dark-bg {
+    background-color: white !important; /* Reset dark background for printing */
+  }
+  .bg-dark-header {
+    background-color: white !important; /* Reset dark background for headers */
+  }
+}
