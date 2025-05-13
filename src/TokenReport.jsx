@@ -42,8 +42,8 @@ const TokenReport = ({ data }) => {
 
   const totalTransferred = transferAmounts.reduce((a, b) => a + b, 0);
   const totalGasUsed = gasUsed.reduce((a, b) => a + b, 0);
-  const totalGasCost = gasCosts.reduce((a, b) => a + b, 0);
-
+  // const totalGasCost = gasCosts.reduce((a, b) => a + b, 0);
+  const totalGasCost = gasCosts.map(val => parseFloat(val)).reduce((acc, val) => acc + val, 0);
   const gasUsedData = {
     labels,
     datasets: [
@@ -103,7 +103,7 @@ const TokenReport = ({ data }) => {
         <h3>Transfer Insights</h3>
         <ul>
           <li>Total Transfer Amount (USDT): {totalTransferred.toFixed(2)}</li>
-          <li>Total Gas Used: {totalGasUsed.toLocaleString()}</li>
+           <li>Total Gas Used: {totalGasUsed.toLocaleString()}</li>
           <li>Total Gas Cost (ETH): {totalGasCost.toFixed(6)}</li>
         </ul>
       </div>
