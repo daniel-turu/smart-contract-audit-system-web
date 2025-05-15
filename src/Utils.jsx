@@ -43,6 +43,12 @@ export const TokenTransfers = ({
   onAddressChange,
   rangeOption,
   onRangeOptionChange,
+  network,
+  onNetworkChange,
+  fromTime,
+  toTime,
+  onFromTimeChange,
+  onToTimeChange,
   onSubmit,
   isScanning
 }) => {
@@ -57,6 +63,20 @@ export const TokenTransfers = ({
           onChange={onAddressChange}
           className="w-full mt-1 px-4 py-2 bg-gray-900 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+      </div>
+
+      <div>
+        <label className="block text-gray-300 font-semibold">Network</label>
+        <select
+          value={network}
+          onChange={onNetworkChange}
+          className="w-full mt-1 px-4 py-2 bg-gray-900 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="eth">Ethereum</option>
+          <option value="bnb">Binance Smart Chain</option>
+          <option value="polygon">Polygon</option>
+          {/* Add more if available in NETWORK_CONFIG */}
+        </select>
       </div>
 
       <div>
@@ -78,10 +98,29 @@ export const TokenTransfers = ({
         </select>
       </div>
 
+      <div>
+        <label className="block text-gray-300 font-semibold">From Time (Optional)</label>
+        <input
+          type="datetime-local"
+          value={fromTime}
+          onChange={onFromTimeChange}
+          className="w-full mt-1 px-4 py-2 bg-gray-900 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div>
+        <label className="block text-gray-300 font-semibold">To Time (Optional)</label>
+        <input
+          type="datetime-local"
+          value={toTime}
+          onChange={onToTimeChange}
+          className="w-full mt-1 px-4 py-2 bg-gray-900 text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       <ActionButton onClick={onSubmit} disabled={isScanning} isScanning={isScanning} label="Get Token Transfers" />
     </div>
   );
 };
-
 
 

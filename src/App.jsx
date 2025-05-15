@@ -1,10 +1,5 @@
 import { useState, useRef } from 'react';
 import { ActionButton, FileUpload, TokenTransfers } from './Utils.jsx';
-import { AnalysisRegex } from './AnalysisRegex.jsx';
-import { MythrilAnalysis } from './MythrilAnalysis.jsx';
-import { SlitherAnalysis } from './SlitherAnalysis.jsx';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import Report from './Report.jsx';
 import TokenReport from './TokenReport.jsx';
 
@@ -16,6 +11,9 @@ function App() {
     file: null,
     address: '',
     rangeOption: 'last_7_days',
+    network: 'eth',
+    fromTime: '',
+    toTime: ''
   });
   const [status, setStatus] = useState('');
   const [analysisResults, setAnalysisResults] = useState(null);
@@ -35,49 +33,68 @@ function App() {
     setContractData({ ...contractData, rangeOption: e.target.value });
   };
 
-  const handleSubmit = async (type) => {
-    setIsScanning(true);
-    setStatus('Scanning in progress...');
-
-    try {
-      const formData = new FormData();
-      const baseUrl = 'http://128.140.92.117:7000';
-      // const baseUrl = window.location.origin;
-      let url = '';
-    
-      if (type === 'file') {
-        if (!contractData.file) return setStatus('Please upload a Solidity file.');
-        formData.append('solidity_file', contractData.file);
-        url = `${baseUrl}/analyze/file/`;
-      } else if (type === 'token-transfers') {
-        if (!contractData.address) return setStatus('Please enter a contract address.');
-        formData.append('contract_address', contractData.address);
-        formData.append('range', contractData.rangeOption);
-        url = `${baseUrl}/analyze/token-transfers/`;
-      }
-
-      const response = await fetch(url, { method: 'POST', body: formData });
-      const result = await response.json();
-
-      if (response.ok) {
-
-        if (type === 'file') {
-          setAnalysisResults(result);
-        } else if (type === 'token-transfers') {
-          setAnalysisResults(result.contract_analyzed);
-          setTokenResults(result);
-        }
-        
-        setStatus('Scan complete!');
-      } else {
-        setStatus(`Error: ${result.error || 'Unknown error'}`);
-      }
-    } catch (error) {
-      setStatus(`Error: ${error.message}`);
-    } finally {
-      setIsScanning(false);
-    }
+  const handleNetworkChange = (e) => {
+    setContractData({ ...contractData, network: e.target.value });
   };
+
+  const handleFromTimeChange = (e) => {
+    setContractData({ ...contractData, fromTime: e.target.value });
+  };
+
+  const handleToTimeChange = (e) => {
+    setContractData({ ...contractData, toTime: e.target.value });
+  };
+
+
+const handleSubmit = async (type) => {
+  setIsScanning(true);
+  setStatus('Scanning in progress...');
+
+  try {
+    const formData = new FormData();
+    const baseUrl = "http://128.140.92.117:7000";
+    let url = '';
+
+    if (type === 'file') {
+      if (!contractData.file) return setStatus('Please upload a Solidity file.');
+      formData.append('solidity_file', contractData.file);
+      url = `${baseUrl}/analyze/file/`;
+    } else if (type === 'token-transfers') {
+      if (!contractData.address) return setStatus('Please enter a contract address.');
+      formData.append('contract_address', contractData.address);
+      formData.append('range_option', contractData.rangeOption);
+      formData.append('network', contractData.network);
+      if (contractData.fromTime) formData.append('from_time', contractData.fromTime);
+      if (contractData.toTime) formData.append('to_time', contractData.toTime);
+      url = `${baseUrl}/analyze/token-transfers/`;
+    }
+
+    // Log FormData entries for debugging
+    for (let entry of formData.entries()) {
+      console.log(entry[0] + ": " + entry[1]);
+    }
+
+    const response = await fetch(url, { method: 'POST', body: formData });
+    const result = await response.json();
+
+    if (response.ok) {
+      if (type === 'file') {
+        setAnalysisResults(result);
+      } else if (type === 'token-transfers') {
+        setAnalysisResults(result.contract_analyzed);
+        setTokenResults(result);
+      }
+      setStatus('Scan complete!');
+    } else {
+      setStatus(`Error: ${result.error || 'Unknown error'}`);
+    }
+  } catch (error) {
+    setStatus(`Error: ${error.message}`);
+  } finally {
+    setIsScanning(false);
+  }
+};
+
 
   // Updated handlePrint function using html2canvas and jsPDF
   const handlePrint = () => {
@@ -188,6 +205,13 @@ function App() {
                 onAddressChange={handleAddressChange}
                 rangeOption={contractData.rangeOption}
                 onRangeOptionChange={handleRangeOptionChange}
+                network={contractData.network}
+                onNetworkChange={handleNetworkChange}
+                fromTime={contractData.fromTime}
+                toTime={contractData.toTime}
+                onFromTimeChange={handleFromTimeChange}
+                onToTimeChange={handleToTimeChange}
+
                 onSubmit={() => handleSubmit('token-transfers')}
                 isScanning={isScanning}
               />
