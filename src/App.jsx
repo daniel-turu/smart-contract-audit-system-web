@@ -52,7 +52,7 @@ const handleSubmit = async (type) => {
 
   try {
     const formData = new FormData();
-    const baseUrl = "http://128.140.92.117:7000";
+    const baseUrl = "http://127.0.0.1:8000";
     let url = '';
 
     if (type === 'file') {
